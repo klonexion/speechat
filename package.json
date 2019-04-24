@@ -16,6 +16,7 @@
     "mini-http": "^1.0.0"
   },
   "devDependencies": {
-    "local-web-server": "^2.6.1"
+    "local-web-server": "^2.6.1",
+    "twitch-js": "^2.0.0-beta.30"
   }
 }
