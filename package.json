@@ -14,5 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "mini-http": "^1.0.0"
+  },
+  "devDependencies": {
+    "local-web-server": "^2.6.1"
   }
 }
