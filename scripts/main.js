@@ -16,6 +16,7 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
       window.speechSynthesis.speak(speechMessage);
     }
   }).controller('speechCtrl', ['$scope', 'speechSvc', function($scope, speechSvc) {
+    $scope.videoId = undefined;
 
     $scope.accessToken = undefined;
     $scope.speech = function() {
@@ -31,7 +32,6 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
     }
 
     $scope.checkEvents = function() {
-      $scope.videoId = '680520909052858'
       if ($scope.videoId) {
         var source = new EventSource("https://streaming-graph.facebook.com/" + $scope.videoId + "/live_comments?access_token=" + $scope.accessToken);
         source.onmessage = function(event) {
@@ -75,7 +75,26 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
       chat.on(chatConstants.EVENTS.ALL, function(hay){
         console.log(hay)
         if(hay.command==="PRIVMSG"){
-          speechSvc.speech(hay.message)
+          if(hay.message && !hay.message.startsWith('!')){
+            if(hay.username !== 'nightbot'){
+              speechSvc.speech(hay.message)
+            }
+          }else{
+            if(hay.message.startsWith('!perra')){
+              
+              var audio = new Audio('audios/perra.mp3');
+              audio.play();
+              var sayPerra = hay.message.replace('!perra', '').trim();
+              if(sayPerra){
+                var time = setTimeout(function(){
+                  speechSvc.speech(sayPerra);
+                  
+                },1500);
+                
+              }
+            }
+          }
+          
         }
       });
       // Connect ...
