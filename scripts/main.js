@@ -17,8 +17,25 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
     }
   }).controller('speechCtrl', ['$scope', 'speechSvc', function($scope, speechSvc) {
     $scope.videoId = undefined;
+    $scope.messagesListChat = [];
 
     $scope.accessToken = undefined;
+    //functions
+    {
+
+      function addElementToChatBox(message){
+        var div = document.createElement("DIV");                       // Create a <p> node
+        var text = document.createTextNode(message);      // Create a text node
+        div.appendChild(text);                                          // Append the text to <p>
+        document.getElementById("chatBox").appendChild(para);
+      }
+
+      function processToChat(message) {
+        addElementToChatBox(message)
+        speechSvc.speech(message);
+      }
+    }
+    //functions
     $scope.speech = function() {
       console.log('hola')
       speechSvc.speech('hola mundo');
@@ -26,7 +43,6 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
 
     $scope.checkFacebook = function() {
       FB.getLoginStatus(function(response) {
-        console.log(response)
         $scope.accessToken = response.authResponse.accessToken;
       });
     }
@@ -37,7 +53,7 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
         source.onmessage = function(event) {
           console.log(event)
           var message = JSON.parse(event.data);
-          speechSvc.speech(message.message);
+          processToChat(message.message);
           // Do something with event.message for example
         };
       }
@@ -72,29 +88,29 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
       });
       // Listen to all events.
       const log = msg => console.log(msg);
-      chat.on(chatConstants.EVENTS.ALL, function(hay){
-        console.log(hay)
-        if(hay.command==="PRIVMSG"){
-          if(hay.message && !hay.message.startsWith('!')){
-            if(hay.username !== 'nightbot'){
-              speechSvc.speech(hay.message)
+      chat.on(chatConstants.EVENTS.ALL, function(hay) {
+        if (hay.command === "PRIVMSG") {
+          if (hay.message && !hay.message.startsWith('!')) {
+            if (hay.username !== 'nightbot') {
+              processToChat(hay.message)
             }
-          }else{
-            if(hay.message.startsWith('!perra')){
-              
+          } else {
+            if (hay.message.startsWith('!perra')) {
+
               var audio = new Audio('audios/perra.mp3');
               audio.play();
               var sayPerra = hay.message.replace('!perra', '').trim();
-              if(sayPerra){
-                var time = setTimeout(function(){
-                  speechSvc.speech(sayPerra);
-                  
-                },1500);
-                
+              if (sayPerra) {
+                var time = setTimeout(function() {
+
+                  processToChat('command -> sayPerra: ' + sayPerra);
+
+                }, 1500);
+
               }
             }
           }
-          
+
         }
       });
       // Connect ...
@@ -103,5 +119,7 @@ angular.module('com.speechat', ['ngMaterial', 'ngMessages'])
         chat.join(channel);
       });
     }
+
+    $scope.startTwitch()
   }]);
   //oauth:d1yase7q8eyo4qapjczik7en9340zv
