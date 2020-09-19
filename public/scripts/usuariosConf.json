@@ -1,0 +1,22 @@
+{
+  "zafiro_girl": {
+    "voz": 8,
+    "pitch": 1
+  },
+  "venussks": { 
+    "voz": 0,
+    "pitch": 0.7,
+    "special": true,
+    "vozLoquendo": "Castilian Spanish female voice :: Carmen 16000 L"
+  },
+  "rucchi006": {
+    "voz":  3,
+    "pitch": 0.1
+  },
+  "adrian_carna97": {
+    "voz":  8,
+    "special": true,
+    "vozLoquendo": "Esperanto robotic male voice :: Ludoviko 44100 L"
+  }
+  
+}

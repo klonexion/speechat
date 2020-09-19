@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>OBS</title>
+  <script src="/scripts/libs/socket.js"></script>
+
+</head>
+
+<body>
+  <div id="miDiv">
+
+  </div>
+ 
+  <script>
+    var i = 0;
+ 
+    var socket = io.connect('http://localhost/');
+    socket.on('comando', function(data){
+      var vid = document.createElement("video"); 
+      vid.setAttribute('width', '1000');
+      vid.setAttribute('height', '1000');
+      var source = document.createElement('source');
+      source.setAttribute('src', '/videos/'+data+".mp4");
+      //source.setAttribute('type', 'video/mp4');
+      vid.appendChild(source);
+      document.getElementById('miDiv').appendChild(vid);
+      vid.play();
+      vid.onended =  function(){
+        document.getElementById('miDiv').removeChild(vid)
+      };
+    });
+     
+      
+  </script>
+
+</body>
+
+</html>

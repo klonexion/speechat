@@ -13,10 +13,23 @@
   "author": "Carlos Landin",
   "license": "ISC",
   "dependencies": {
-    "mini-http": "^1.0.0"
+    "annyang": "^2.6.1",
+    "cors": "^2.8.5",
+    "event-source-polyfill": "^1.0.11",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "launchdarkly-eventsource": "^1.1.0",
+    "mini-http": "^1.0.0",
+    "node-run-cmd": "^1.0.1",
+    "obs-websocket-js": "^4.0.1",
+    "request": "^2.88.0",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "local-web-server": "^2.6.1",
-    "twitch-js": "^2.0.0-beta.30"
+    "node-key-sender": "^1.0.11",
+    "twitch-js": "^2.0.0-beta.32"
   }
 }

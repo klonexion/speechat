@@ -1,0 +1,290 @@
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Angular Material style sheet -->
+    <link
+      rel="stylesheet"
+      href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+    <script
+      async
+      defer
+      src="https://connect.facebook.net/en_US/sdk.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="node_modules/twitch-js/dist/twitch.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/libs/socket.js"></script>
+    <script src="scripts/main.js"></script>
+   
+  </head>
+
+  <body ng-app="com.speechat" ng-cloak ng-controller="speechCtrl">
+    <div layout="column" layout-align="start start" style="height: 80%;">
+      <md-tabs md-border-bottom class="chat-box" style="height: 100%; width: 100%;">
+        <md-tab label="Chat">
+          <md-content class="md-padding">
+            <div id="chatBox">
+              {{message}}
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="5vs5">
+          <md-content class="md-padding" class="chat-box">
+            <div layout="row" layout-align="start start">
+              <div id="lista" flex="20">
+                <md-list ng-cloak>
+                  <md-button
+                    class="md-primary md-raised"
+                    ng-click="hacerLista()"
+                  >
+                    hacer lista
+                  </md-button>
+                  <md-button
+                    class="md-warn md-raised"
+                    ng-click="limpiarLista()"
+                  >
+                    limpiar lista
+                  </md-button>
+                  <md-list-item ng-repeat="player in players track by $index">
+                    <p>{{ player}}</p>
+                    <md-button
+                      class="md-icon-button"
+                      ng-click="borraDeLista(players, $index)"
+                    >
+                      <md-icon>
+                        close
+                      </md-icon>
+                    </md-button>
+                    <md-divider></md-divider>
+                  </md-list-item>
+                </md-list>
+              </div>
+              <div
+                flex="80"
+                layout="row"
+                layout-align="center center"
+                style="
+                  color: white;
+                  font-size: 20px;
+                  font-weight: bolder;
+                  font-family: fantasy;
+                  background-image: url(../img/fondo.png);
+                  background-repeat: repeat-x;
+                "
+              >
+                <div class="equipoA" ng-cloak flex="20" layout="column">
+                  <md-button ng-click="agregaUnoMas(equipoA)" flex>
+                    +
+                  </md-button>
+                  <md-list>
+                    <md-list-item ng-repeat="player in equipoA track by $index">
+                      <md-button
+                        class="md-icon-button"
+                        ng-click="borraDeLista(equipoA, $index)"
+                      >
+                        <md-icon>
+                          close
+                        </md-icon>
+                      </md-button>
+                      <p>{{ player }}</p>
+                      <md-divider></md-divider>
+                    </md-list-item>
+                  </md-list>
+                </div>
+                <div class="equipo2" ng-cloak flex="20" flex layout="column">
+                  <md-button ng-click="agregaUnoMas(equipoB)">
+                    +
+                  </md-button>
+                  <md-list>
+                    <md-list-item ng-repeat="player in equipoB track by $index">
+                      <p>{{ player }}</p>
+                      <md-button
+                        class="md-icon-button"
+                        ng-click="borraDeLista(equipoB, $index)"
+                      >
+                        <md-icon>
+                          close
+                        </md-icon>
+                      </md-button>
+                      <md-divider></md-divider>
+                    </md-list-item>
+                  </md-list>
+                </div>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="Votaciones">
+          <md-content class="md-padding">
+            <div layout="row">
+              <div layout="column" flex="20">
+                <div
+                  ng-repeat="player in playersFull track by $index"
+                  layout="column"
+                  class="md-padding"
+                >
+                  <div>{{ player.name}}</div>
+                  <div>
+                    <strong>Votos:</strong>
+                    <span>{{ player.votos}}</span>
+                  </div>
+                  <md-select
+                    ng-model="player.pick"
+                    style="padding: 0; margin: 0;"
+                  >
+                    <md-option
+                      ng-repeat="heroe in heroes | orderBy "
+                      ng-value="heroe"
+                    >
+                      {{heroe}}
+                    </md-option>
+                  </md-select>
+                  <md-button
+                    class="md-icon-button"
+                    ng-click="borraDeLista(playersFull, $index)"
+                  >
+                    <md-icon>
+                      close
+                    </md-icon>
+                  </md-button>
+                  <md-divider></md-divider>
+                </div>
+              </div>
+              <div
+                layout="row"
+                flex="80"
+                style="
+                  padding-top: 100px;
+                  padding-top: 100px;
+                  color: white;
+                  font-size: 20px;
+                  font-weight: bolder;
+                  font-family: fantasy;
+                  background-image: url(../img/fondo.png);
+                  background-repeat: repeat-x;
+                "
+              >
+                <div flex="20"></div>
+                <div flex="20" layout="column" layout-align="start center">
+                  <div layout="column" layout-align="start center">
+                    <img
+                      src="https://static.heroesofthestorm.com/gd/cc87c8bcafc797c1daf40e7a7ee7dfca/heroes/{{playersFull[1].pick}}/circleIcon.png"
+                    />
+                    <div>{{playersFull[1].votos}}</div>
+                    <div>{{playersFull[1].name}}</div>
+                  </div>
+                </div>
+                <div
+                  flex="20"
+                  layout="column"
+                  layout-align="start center"
+                  style="margin-top: -30;"
+                >
+                  <div layout="column" layout-align="start center">
+                    <img
+                      src="https://static.heroesofthestorm.com/gd/cc87c8bcafc797c1daf40e7a7ee7dfca/heroes/{{playersFull[0].pick}}/circleIcon.png"
+                    />
+                    <div>{{playersFull[0].votos}}</div>
+                    <div>{{playersFull[0].name}}</div>
+                  </div>
+                </div>
+                <div flex="20" layout="column" layout-align="start center">
+                  <div layout="column" layout-align="start center">
+                    <img
+                      src="https://static.heroesofthestorm.com/gd/cc87c8bcafc797c1daf40e7a7ee7dfca/heroes/{{playersFull[2].pick}}/circleIcon.png"
+                    />
+                    <div>{{playersFull[2].votos}}</div>
+                    <div>{{playersFull[2].name}}</div>
+                  </div>
+                </div>
+                <div flex="20"></div>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </div>
+    <div>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Facebook">
+          <script>
+            (function (d, s, id) {
+              var js,
+                fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) {
+                return;
+              }
+              js = d.createElement(s);
+              js.id = id;
+              js.src = "https://connect.facebook.net/en_us/sdk.js";
+              fjs.parentNode.insertBefore(js, fjs);
+            })(document, "script", "facebook-jssdk");
+          </script>
+
+          <div layout="row" layout-align="start center">
+            <md-input-container>
+              <label>Intriduce your Live video ID</label>
+              <input ng-model="videoId" />
+            </md-input-container>
+            <md-button ng-click="initFacebook()">
+              Login Facebook
+            </md-button>
+            <md-button ng-click="checkEvents()">
+              Get messages
+            </md-button>
+          </div>
+          <div id="fb-root"></div>
+          <script
+            async
+            defer
+            crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=2259098627641805&autoLogAppEvents=1"
+          ></script>
+          <div
+            class="fb-login-button"
+            data-size="large"
+            data-button-type="login_with"
+            data-auto-logout-link="false"
+            data-use-continue-as="false"
+          ></div>
+        </md-tab>
+        <md-tab label="Twitch">
+          <md-button ng-click="startTwitch()">
+            Twitch
+          </md-button>
+        </md-tab>
+        <md-tab label="General">
+          <div layout-padding layout="row">
+            <md-checkbox ng-model="muted">
+              Mute
+            </md-checkbox>
+            <md-select ng-model="voz" ng-change="setVoz()">
+              <md-option
+                ng-repeat="voice in voices track by $index"
+                ng-value="$index"
+              >
+                {{voice.name}}
+              </md-option>
+            </md-select>
+          </div>
+        </md-tab>
+      </md-tabs>
+    </div>
+  </body>
+</html>

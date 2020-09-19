@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Our Company</title>
+</head>
+
+<body>
+  <div id="miDiv">
+    <video height="500" width="500" id="logo" muted="muted" >
+        <source   src="/videos/logo.mp4"  /> 
+    </video>
+
+  </div>
+ <div style="color: red;" id="lol">
+
+ </div>
+  <script>
+    var i = 0;
+    //document.getElementById('logo').play();
+    setInterval(function(){
+      console.log('voy a prender')
+      document.getElementById('logo').play();
+      //600000
+    }, 120000);
+    
+    setInterval(function(){
+      
+      document.getElementById('lol').innerHTML = new Date();
+      //600000
+    }, 1000);  
+  </script>
+
+</body>
+
+</html>
